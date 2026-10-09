@@ -1,18 +1,76 @@
 package Assignment_problems;
-import java.util.Arrays;
 
-public class Main {
+import java.util.*;
 
-    static void applyMultipliers(double[] playerScores, int captainIndex, int viceCaptainIndex) {
-        playerScores[captainIndex] *= 2;
-        playerScores[viceCaptainIndex] *= 1.5;
+abstract class Ticket {
+    int count;
+    static final double FEE = 20;
+
+    Ticket(int count) {
+        this.count = count;
     }
 
+    abstract double price();
+
+    double amount() {
+        return count * (price() + FEE);
+    }
+}
+
+class Regular extends Ticket {
+    Regular(int count) {
+        super(count);
+    }
+
+    double price() {
+        return 150;
+    }
+}
+
+class Premium extends Ticket {
+    Premium(int count) {
+        super(count);
+    }
+
+    double price() {
+        return 250;
+    }
+}
+
+class Recliner extends Ticket {
+    Recliner(int count) {
+        super(count);
+    }
+
+    double price() {
+        return 400;
+    }
+}
+
+public class Main {
     public static void main(String[] args) {
-        double[] scores = {40, 55, 30, 62};
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        double total = 0;
 
-        applyMultipliers(scores, 1, 3);
+        for (int i = 0; i < n; i++) {
+            String seat = sc.next();
+            int count = sc.nextInt();
+            Ticket t;
 
-        System.out.println(Arrays.toString(scores));
+            switch (seat) {
+                case "REGULAR": t = new Regular(count); break;
+                case "PREMIUM": t = new Premium(count); break;
+                case "RECLINER": t = new Recliner(count); break;
+                default: continue;
+            }
+
+            double amount = t.amount();
+            System.out.printf("%s: %.2f%n", seat, amount);
+            total += amount;
+        }
+
+        System.out.printf("Total: %.2f%n", total);
+        sc.close();
     }
 }
